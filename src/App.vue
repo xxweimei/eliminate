@@ -1,28 +1,46 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello></hello>
+    <header>a little game</header>
+    <div class="body">
+      <div class="left">left</div>
+      <aside class="center">
+        <board></board>
+      </aside>
+      <div class="right">right</div>
+    </div>
+    <footer>#footer</footer>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+  import Board from './components/Board'
 
-export default {
-  name: 'app',
-  components: {
-    Hello
+  export default {
+    name: 'app',
+    components: {
+      Board
+    }
   }
-}
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+  #app {
+    display: flex;
+    flex-direction: column;
+  }
+
+  header,footer {
+    flex: 1;
+    min-height: 5rem;
+  }
+
+  .body {
+    flex: 1;
+    justify-content:center;
+    display: flex;
+  }
+
+  .left,.right,.center {
+    flex: 1;
+  }
 </style>

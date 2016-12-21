@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-    <header>a little game</header>
+    <header></header>
     <div class="body">
-      <div class="left">left</div>
+      <div class="left"></div>
       <aside class="center">
         <board></board>
       </aside>
-      <div class="right">right</div>
+      <div class="right"></div>
     </div>
-    <footer>#footer</footer>
+    <footer></footer>
   </div>
 </template>
 

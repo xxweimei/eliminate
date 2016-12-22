@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="board">
-      <div v-for="row in showMaps" class="row">
+      <div v-for="(row,index) in showMaps" class="row" v-bind:class="{row_left:index==0,row_right:index==showMaps.length-1}">
         <div v-for="cell in row" class="cell" @click="mouseClick(cell)"
              v-bind:class="{
                              cell_r:cell.color=='R',
@@ -469,15 +469,26 @@
     display: flex;
   }
 
+  .row {
+    border-top: solid 4px gold;
+    border-bottom: solid 4px gold;
+  }
+  .row_left {
+    border-left: solid 4px gold;
+  }
+  .row_right {
+    border-right: solid 4px gold;
+  }
+
   .cell {
     width: 50px;
     height: 50px;
     text-align: center;
-    border: solid 1px gold;
+    border: solid 2px gold;
     user-select: none;
   }
   .cell_click {
-    border: dashed 1px blue;
+    border: dashed 2px blue;
   }
   .cell_r {
     background-image: url("../assets/pic/R.jpg");

@@ -352,7 +352,10 @@
         }
       },
       removeAndDownCell(){
-        if (this.removeList.length == 0) return;
+        if (this.removeList.length == 0) {
+          this.removingFlag = false;
+          return;
+        }
         this.removeList.forEach((cellKey) => {
           this.maps[cellKey.split('_')[0]][cellKey.split('_')[1]].color = ' ';
         });
@@ -419,6 +422,7 @@
             alert('消除中');
             return;
           }
+          this.removingFlag = true;
           this.move(this.sourceCell, cell);
           this.sourceCell = null;
         } else {

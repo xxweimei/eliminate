@@ -20,7 +20,8 @@
         xSize: 8,
         ySize: 8,
         removeList: [],
-        sourceCell: null
+        sourceCell: null,
+        removingFlag: false
       }
     },
     mounted(){
@@ -354,14 +355,14 @@
         }
       },
       removeAndDownCell(){
-        if(this.removeList.length == 0) return;
+        if (this.removeList.length == 0) return;
         this.removeList.forEach((cellKey) => {
           this.maps[cellKey.split('_')[0]][cellKey.split('_')[1]].color = ' ';
         });
         this.refreshMaps();
         window.setTimeout(() => {
           this.downCell()
-        }, 1000);
+        }, 500);
       },
       downCell(){
         this.initColors();
@@ -377,7 +378,7 @@
         this.refreshMaps();
         window.setTimeout(() => {
           this.fadeCircle();
-        }, 1500);
+        }, 500);
       },
       sameCellColorLeft(x, y, color, sameList) {
         if (sameList.indexOf(x + '_' + y) == -1) {
@@ -416,10 +417,14 @@
         }
       },
       mouseClick(cell) {
-        if(this.sourceCell != null){
-          this.move(this.sourceCell,cell)
+        if (this.sourceCell != null) {
+          if (this.removingFlag) {
+            alert('消除中');
+            return;
+          }
+          this.move(this.sourceCell, cell);
           this.sourceCell = null;
-        }else{
+        } else {
           this.sourceCell = cell;
         }
       },

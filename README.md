@@ -1,6 +1,6 @@
 # eliminate
 
-> a game
+> 使用vue2做的一个网页版三消小游戏。
 
 ## Build Setup
 

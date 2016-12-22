@@ -90,10 +90,7 @@
         if (lx2 && this.isCellColorEqual(this.maps[x][y], this.maps[x - 1][y], this.maps[x - 2][y])) {
           return true;
         }
-        if (bx2 && this.isCellColorEqual(this.maps[x][y], this.maps[x + 1][y], this.maps[x + 2][y])) {
-          return true;
-        }
-        return false;
+        return bx2 && this.isCellColorEqual(this.maps[x][y], this.maps[x + 1][y], this.maps[x + 2][y]);
       },
       //判断3个元素颜色是否一致
       isCellColorEqual(c1, c2, c3) {

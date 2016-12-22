@@ -3,7 +3,7 @@
     <div class="board">
       <div v-for="(row,index) in showMaps" class="row" v-bind:index="index">
         <div v-for="cell in row" class="cell" @click="mouseClick(cell)"
-             v-bind:class="{cell_r:cell.color=='R',cell_b:cell.color=='B',cell_g:cell.color=='G'}">
+             v-bind:class="{cell_r:cell.color=='R',cell_b:cell.color=='B',cell_g:cell.color=='G',cell_y:cell.color=='Y'}">
         </div>
       </div>
     </div>
@@ -63,7 +63,7 @@
       },
       //初始化颜色
       initColors() {
-        this.colors = ['R', 'B', 'G'];
+        this.colors = ['R', 'B', 'G', 'Y'];
       },
       //判断当前坐标元素是否可消除
       isLine(x, y) {
@@ -299,6 +299,7 @@
           alert('no eliminate cell');
           return;
         }
+        this.removingFlag = true;
         let sourceColor = this.maps[source.x][source.y].color;
         let targetColor = this.maps[target.x][target.y].color;
         this.maps[target.x][target.y].color = sourceColor;
@@ -417,14 +418,11 @@
         }
       },
       mouseClick(cell) {
+        if (this.removingFlag) return;
         if (this.sourceCell != null) {
-          if (this.removingFlag) {
-            alert('消除中');
-            return;
-          }
-          this.removingFlag = true;
-          this.move(this.sourceCell, cell);
+          let sourceCell = this.sourceCell;
           this.sourceCell = null;
+          this.move(sourceCell, cell);
         } else {
           this.sourceCell = cell;
         }
@@ -482,5 +480,9 @@
 
   .cell_b {
     background: cornflowerblue;
+  }
+
+  .cell_y {
+    background: greenyellow;
   }
 </style>

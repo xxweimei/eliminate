@@ -1,50 +1,11 @@
 <template>
   <div>
     <div class="board">
-      <div class="row">
-        <div class="cell">y\x</div>
-        <div class="cell">0</div>
-        <div class="cell">1</div>
-        <div class="cell">2</div>
-        <div class="cell">3</div>
-        <div class="cell">4</div>
-        <div class="cell">5</div>
-        <div class="cell">6</div>
-        <div class="cell">7</div>
-      </div>
       <div v-for="(row,index) in showMaps" class="row" v-bind:index="index">
-        <div class="cell">{{index}}</div>
-        <div v-for="cell in row" class="cell"
+        <div v-for="cell in row" class="cell" @click="mouseClick(cell)"
              v-bind:class="{cell_r:cell.color=='R',cell_b:cell.color=='B',cell_g:cell.color=='G'}">
         </div>
       </div>
-    </div>
-    <div>
-      <label>
-        source x:
-        <input type="text" v-model="toMoveSourceCellX">
-      </label>
-    </div>
-    <div>
-      <label>
-        source y:
-        <input type="text" v-model="toMoveSourceCellY">
-      </label>
-    </div>
-    <div>
-      <label>
-        target x:
-        <input type="text" v-model="toMoveTargetCellX">
-      </label>
-    </div>
-    <div>
-      <label>
-        target y:
-        <input type="text" v-model="toMoveTargetCellY">
-      </label>
-    </div>
-    <div>
-      <button @click="clickToMove">交换</button>
     </div>
   </div>
 </template>
@@ -59,10 +20,7 @@
         xSize: 8,
         ySize: 8,
         removeList: [],
-        toMoveSourceCellX: 3,
-        toMoveSourceCellY: 3,
-        toMoveTargetCellX: 3,
-        toMoveTargetCellY: 4
+        sourceCell: null
       }
     },
     mounted(){
@@ -403,23 +361,23 @@
         this.refreshMaps();
         window.setTimeout(() => {
           this.downCell()
-        }, 2000);
+        }, 1000);
       },
       downCell(){
         this.initColors();
+        this.removeList.sort();
         this.removeList.forEach((cellKey) => {
           let x = cellKey.split('_')[0];
           for (let i = cellKey.split('_')[1]; i > 0; i--) {
             this.maps[x][i].color = this.maps[x][i - 1].color;
           }
           let index = parseInt(Math.random() * (this.colors.length), 10);
-          console.log(index);
           this.maps[x][0].color = this.colors[index];
         });
         this.refreshMaps();
         window.setTimeout(() => {
           this.fadeCircle();
-        }, 2000);
+        }, 1500);
       },
       sameCellColorLeft(x, y, color, sameList) {
         if (sameList.indexOf(x + '_' + y) == -1) {
@@ -457,25 +415,18 @@
           this.sameCellColorDown(x, nextY, color, sameList);
         }
       },
-      //点击交换
-      clickToMove(){
-        let source = {
-          x: Number(this.toMoveSourceCellX),
-          y: Number(this.toMoveSourceCellY),
-          color: this.maps[this.toMoveSourceCellX][this.toMoveSourceCellY].color
-        };
-        let target = {
-          x: Number(this.toMoveTargetCellX),
-          y: Number(this.toMoveTargetCellY),
-          color: this.maps[this.toMoveTargetCellX][this.toMoveTargetCellY].color
-        };
-        console.log(source);
-        console.log(target);
-        this.move(source, target);
+      mouseClick(cell) {
+        if(this.sourceCell != null){
+          this.move(this.sourceCell,cell)
+          this.sourceCell = null;
+        }else{
+          this.sourceCell = cell;
+        }
       },
       refreshMaps() {
         this.showMaps = [];
         this.showMaps = this.maps;
+//        this.printMaps();
       },
       //打印
       printMaps() {
@@ -503,10 +454,11 @@
   }
 
   .cell {
-    width: 30px;
-    height: 30px;
+    width: 40px;
+    height: 40px;
     text-align: center;
     margin: 1px;
+    user-select: none;
   }
 
   .cell_r {
@@ -517,9 +469,9 @@
   .cell_g {
     width: 0;
     height: 0;
-    border-bottom: 30px solid forestgreen;
-    border-left: 15px solid transparent;
-    border-right: 15px solid transparent;
+    border-bottom: 40px solid forestgreen;
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
   }
 
   .cell_b {

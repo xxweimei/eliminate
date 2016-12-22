@@ -8,11 +8,7 @@
                              cell_b:cell.color=='B',
                              cell_g:cell.color=='G',
                              cell_y:cell.color=='Y',
-                             cell_click:cell.click,
-                             cell_left:cell.x==0,
-                             cell_right:cell.x==row.length-1,
-                             cell_top:cell.y==0,
-                             cell_bottom:cell.y==showMaps.length-1
+                             cell_click:cell.click
                            }">
         </div>
       </div>
@@ -479,18 +475,6 @@
     text-align: center;
     border: solid 1px gold;
     user-select: none;
-  }
-  .cell_left {
-    border-left: solid 4px gold;
-  }
-  .cell_right {
-    border-right: solid 4px gold;
-  }
-  .cell_top {
-    border-top: solid 4px gold;
-  }
-  .cell_bottom {
-    border-bottom: solid 4px gold;
   }
   .cell_click {
     border: dashed 1px blue;

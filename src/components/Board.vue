@@ -1,9 +1,19 @@
 <template>
   <div>
     <div class="board">
-      <div v-for="(row,index) in showMaps" class="row" v-bind:index="index">
+      <div v-for="row in showMaps" class="row">
         <div v-for="cell in row" class="cell" @click="mouseClick(cell)"
-             v-bind:class="{cell_r:cell.color=='R',cell_b:cell.color=='B',cell_g:cell.color=='G',cell_y:cell.color=='Y',cell_click:cell.click}">
+             v-bind:class="{
+                             cell_r:cell.color=='R',
+                             cell_b:cell.color=='B',
+                             cell_g:cell.color=='G',
+                             cell_y:cell.color=='Y',
+                             cell_click:cell.click,
+                             cell_left:cell.x==0,
+                             cell_right:cell.x==row.length-1,
+                             cell_top:cell.y==0,
+                             cell_bottom:cell.y==showMaps.length-1
+                           }">
         </div>
       </div>
     </div>
@@ -461,33 +471,39 @@
 <style scoped>
   .board {
     display: flex;
-    border: solid 3px gold;
   }
 
   .cell {
     width: 50px;
     height: 50px;
     text-align: center;
-    border: solid 2px gold;
+    border: solid 1px gold;
     user-select: none;
   }
-
-  .cell_click {
-    border: dashed 2px blue;
+  .cell_left {
+    border-left: solid 4px gold;
   }
-
+  .cell_right {
+    border-right: solid 4px gold;
+  }
+  .cell_top {
+    border-top: solid 4px gold;
+  }
+  .cell_bottom {
+    border-bottom: solid 4px gold;
+  }
+  .cell_click {
+    border: dashed 1px blue;
+  }
   .cell_r {
     background-image: url("../assets/pic/R.jpg");
   }
-
   .cell_g {
     background-image: url("../assets/pic/G.png");
   }
-
   .cell_b {
     background-image: url("../assets/pic/B.jpg");
   }
-
   .cell_y {
     background-image: url("../assets/pic/Y.jpg");
   }

@@ -3,7 +3,7 @@
     <div class="board">
       <div v-for="(row,index) in showMaps" class="row" v-bind:index="index">
         <div v-for="cell in row" class="cell" @click="mouseClick(cell)"
-             v-bind:class="{cell_r:cell.color=='R',cell_b:cell.color=='B',cell_g:cell.color=='G',cell_y:cell.color=='Y'}">
+             v-bind:class="{cell_r:cell.color=='R',cell_b:cell.color=='B',cell_g:cell.color=='G',cell_y:cell.color=='Y',cell_click:cell.click}">
         </div>
       </div>
     </div>
@@ -288,18 +288,19 @@
       },
       move(source, target) {
         if (!source || !target) {
-          alert('empty cell');
+          console.log('empty cell');
           return;
         }
         if (!this.near(source, target)) {
-          alert('not near');
+          this.sourceCell = target;
+          this.sourceCell.click = true;
+          console.log('not near');
           return;
         }
         if (source.color == target.color) {
-          alert('no eliminate cell');
+          console.log('no eliminate cell');
           return;
         }
-        this.removingFlag = true;
         let sourceColor = this.maps[source.x][source.y].color;
         let targetColor = this.maps[target.x][target.y].color;
         this.maps[target.x][target.y].color = sourceColor;
@@ -307,11 +308,12 @@
         if (!this.isLine(source.x, source.y) && !this.isLine(target.x, target.y)) {
           this.maps[source.x][source.y].color = sourceColor;
           this.maps[target.x][target.y].color = targetColor;
-          alert('no eliminate cell');
-        } else {
-          //消除
-          this.fadeCircle();
+          console.log('no eliminate cell');
+          return;
         }
+        //消除
+        this.removingFlag = true;
+        this.fadeCircle();
       },
       near(source, target) {
         let nearCell = (source.x == target.x && (source.y == target.y + 1 || source.y == target.y - 1))
@@ -421,10 +423,14 @@
         if (this.removingFlag) return;
         if (this.sourceCell != null) {
           let sourceCell = this.sourceCell;
+          this.maps[sourceCell.x][sourceCell.y].click = false;
           this.sourceCell = null;
           this.move(sourceCell, cell);
+          this.refreshMaps();
         } else {
           this.sourceCell = cell;
+          this.sourceCell.click = true;
+          this.refreshMaps();
         }
       },
       refreshMaps() {
@@ -455,34 +461,34 @@
 <style scoped>
   .board {
     display: flex;
+    border: solid 3px gold;
   }
 
   .cell {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     text-align: center;
-    margin: 1px;
+    border: solid 2px gold;
     user-select: none;
   }
 
+  .cell_click {
+    border: dashed 2px blue;
+  }
+
   .cell_r {
-    background-color: red;
-    border-radius: 50%;
+    background-image: url("../assets/pic/R.jpg");
   }
 
   .cell_g {
-    width: 0;
-    height: 0;
-    border-bottom: 40px solid forestgreen;
-    border-left: 20px solid transparent;
-    border-right: 20px solid transparent;
+    background-image: url("../assets/pic/G.png");
   }
 
   .cell_b {
-    background: cornflowerblue;
+    background-image: url("../assets/pic/B.jpg");
   }
 
   .cell_y {
-    background: greenyellow;
+    background-image: url("../assets/pic/Y.jpg");
   }
 </style>

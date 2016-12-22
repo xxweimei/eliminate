@@ -1,9 +1,9 @@
-<template>
+<template xmlns:v-bind="http://www.w3.org/1999/xhtml">
   <div>
     <div class="board">
-      <div v-for="(row,index) in showMaps" class="row" v-bind:class="{row_left:index==0,row_right:index==showMaps.length-1}">
-        <div v-for="cell in row" class="cell" @click="mouseClick(cell)"
-             v-bind:class="{
+      <div v-for="(row,index) in showMaps" class="row"
+           v-bind:class="{row_left:index==0,row_right:index==showMaps.length-1}">
+        <div v-for="cell in row" class="cell" @click="mouseClick(cell)" v-bind:class="{
                              cell_r:cell.color=='R',
                              cell_b:cell.color=='B',
                              cell_g:cell.color=='G',
@@ -18,7 +18,7 @@
 
 <script>
   export default {
-    data(){
+    data() {
       return {
         maps: [],
         showMaps: [],
@@ -30,7 +30,7 @@
         removingFlag: false
       }
     },
-    mounted(){
+    mounted() {
       this.initMaps();
       while (this.isDieMap()) {
         this.initMaps();
@@ -40,7 +40,7 @@
     computed: {},
     methods: {
       //初始化地图
-      initMaps(){
+      initMaps() {
         for (let i = 0; i < this.ySize; i++) {
           this.maps[i] = [];
         }
@@ -322,11 +322,11 @@
         this.fadeCircle();
       },
       near(source, target) {
-        let nearCell = (source.x == target.x && (source.y == target.y + 1 || source.y == target.y - 1))
-          || (source.y == target.y && (source.x == target.x + 1 || source.x == target.x - 1));
-        return source.x > -1 && source.x < this.xSize && source.y > -1 && source.y < this.ySize
-          && target.x > -1 && target.x < this.xSize && target.y > -1 && target.y < this.ySize
-          && nearCell;
+        let nearCell = (source.x == target.x && (source.y == target.y + 1 || source.y == target.y - 1)) ||
+          (source.y == target.y && (source.x == target.x + 1 || source.x == target.x - 1));
+        return source.x > -1 && source.x < this.xSize && source.y > -1 && source.y < this.ySize &&
+          target.x > -1 && target.x < this.xSize && target.y > -1 && target.y < this.ySize &&
+          nearCell;
       },
       fadeCircle() {
         //判断选出要消除的格子
@@ -334,7 +334,7 @@
         //删除并下沉
         this.removeAndDownCell();
       },
-      calcToRemoveList(){
+      calcToRemoveList() {
         this.removeList = [];
         for (let i = 0; i < this.xSize; i++) {
           for (let j = 0; j < this.ySize; j++) {
@@ -360,7 +360,7 @@
           }
         }
       },
-      removeAndDownCell(){
+      removeAndDownCell() {
         if (this.removeList.length == 0) {
           this.removingFlag = false;
           return;
@@ -373,7 +373,7 @@
           this.downCell()
         }, 500);
       },
-      downCell(){
+      downCell() {
         this.initColors();
         this.removeList.sort();
         this.removeList.forEach((cellKey) => {
@@ -442,7 +442,7 @@
       refreshMaps() {
         this.showMaps = [];
         this.showMaps = this.maps;
-//        this.printMaps();
+        //        this.printMaps();
       },
       //打印
       printMaps() {
@@ -473,9 +473,11 @@
     border-top: solid 4px gold;
     border-bottom: solid 4px gold;
   }
+
   .row_left {
     border-left: solid 4px gold;
   }
+
   .row_right {
     border-right: solid 4px gold;
   }
@@ -487,18 +489,23 @@
     border: solid 2px gold;
     user-select: none;
   }
+
   .cell_click {
     border: dashed 2px blue;
   }
+
   .cell_r {
     background-image: url("../assets/pic/R.jpg");
   }
+
   .cell_g {
     background-image: url("../assets/pic/G.png");
   }
+
   .cell_b {
     background-image: url("../assets/pic/B.jpg");
   }
+
   .cell_y {
     background-image: url("../assets/pic/Y.jpg");
   }

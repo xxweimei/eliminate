@@ -59,9 +59,9 @@
         xSize: 8,
         ySize: 8,
         removeList: [],
-        toMoveSourceCellX: 0,
+        toMoveSourceCellX: 3,
         toMoveSourceCellY: 3,
-        toMoveTargetCellX: 0,
+        toMoveTargetCellX: 3,
         toMoveTargetCellY: 4
       }
     },
@@ -70,7 +70,7 @@
       while (this.isDieMap()) {
         this.initMaps();
       }
-      this.showMaps = this.maps;
+      this.refreshMaps();
     },
     computed: {},
     methods: {
@@ -364,10 +364,13 @@
           && nearCell;
       },
       fadeCircle() {
-        // 判断选出要消除的格子
+        //判断选出要消除的格子
         this.calcToRemoveList();
+        //删除并下沉
+        this.removeAndDownCell();
       },
       calcToRemoveList(){
+        this.removeList = [];
         for (let i = 0; i < this.xSize; i++) {
           for (let j = 0; j < this.ySize; j++) {
             let key = i + '_' + j;
@@ -392,8 +395,31 @@
           }
         }
       },
-      removeCellAndDown(){
-
+      removeAndDownCell(){
+        if(this.removeList.length == 0) return;
+        this.removeList.forEach((cellKey) => {
+          this.maps[cellKey.split('_')[0]][cellKey.split('_')[1]].color = ' ';
+        });
+        this.refreshMaps();
+        window.setTimeout(() => {
+          this.downCell()
+        }, 2000);
+      },
+      downCell(){
+        this.initColors();
+        this.removeList.forEach((cellKey) => {
+          let x = cellKey.split('_')[0];
+          for (let i = cellKey.split('_')[1]; i > 0; i--) {
+            this.maps[x][i].color = this.maps[x][i - 1].color;
+          }
+          let index = parseInt(Math.random() * (this.colors.length), 10);
+          console.log(index);
+          this.maps[x][0].color = this.colors[index];
+        });
+        this.refreshMaps();
+        window.setTimeout(() => {
+          this.fadeCircle();
+        }, 2000);
       },
       sameCellColorLeft(x, y, color, sameList) {
         if (sameList.indexOf(x + '_' + y) == -1) {
@@ -447,6 +473,10 @@
         console.log(target);
         this.move(source, target);
       },
+      refreshMaps() {
+        this.showMaps = [];
+        this.showMaps = this.maps;
+      },
       //打印
       printMaps() {
         let s = ' \t';
@@ -454,10 +484,10 @@
           s += k + '\t';
         }
         console.log(s);
-        for (let i = 0; i < this.ySize; i++) {
+        for (let i = 0; i < this.xSize; i++) {
           let str = i + '\t';
-          for (let j = 0; j < this.xSize; j++) {
-            str += this.maps[i][j].color + '\t';
+          for (let j = 0; j < this.ySize; j++) {
+            str += this.maps[j][i].color + '\t';
           }
           console.log(str);
         }

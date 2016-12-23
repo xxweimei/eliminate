@@ -8,7 +8,8 @@
                              cell_b:cell.color=='B',
                              cell_g:cell.color=='G',
                              cell_y:cell.color=='Y',
-                             cell_click:cell.click
+                             cell_click:cell.click,
+                             moveUp:removingFlag&&cell.x==sourceCell.x&&cell.y-sourceCell.y==1
                            }">
         </div>
       </div>
@@ -293,17 +294,16 @@
         return true;
       },
       move(source, target) {
-        if (!source || !target) {
-          console.log('empty cell');
-          return;
-        }
         if (!this.near(source, target)) {
           this.sourceCell = target;
           this.sourceCell.click = true;
+          this.refreshMaps();
           console.log('not near');
           return;
         }
         if (source.color == target.color) {
+          this.sourceCell = null;
+          this.refreshMaps();
           console.log('no eliminate cell');
           return;
         }
@@ -314,12 +314,16 @@
         if (!this.isLine(source.x, source.y) && !this.isLine(target.x, target.y)) {
           this.maps[source.x][source.y].color = sourceColor;
           this.maps[target.x][target.y].color = targetColor;
+          this.sourceCell = null;
+          this.refreshMaps();
           console.log('no eliminate cell');
           return;
         }
         //消除
         this.removingFlag = true;
-        this.fadeCircle();
+        window.setTimeout(() => {
+          this.fadeCircle();
+        }, 500)
       },
       near(source, target) {
         let nearCell = (source.x == target.x && (source.y == target.y + 1 || source.y == target.y - 1)) ||
@@ -363,6 +367,7 @@
       removeAndDownCell() {
         if (this.removeList.length == 0) {
           this.removingFlag = false;
+          this.sourceCell = null;
           return;
         }
         this.removeList.forEach((cellKey) => {
@@ -428,11 +433,8 @@
       mouseClick(cell) {
         if (this.removingFlag) return;
         if (this.sourceCell != null) {
-          let sourceCell = this.sourceCell;
-          this.maps[sourceCell.x][sourceCell.y].click = false;
-          this.sourceCell = null;
-          this.move(sourceCell, cell);
-          this.refreshMaps();
+          this.maps[this.sourceCell.x][this.sourceCell.y].click = false;
+          this.move(this.sourceCell, cell);
         } else {
           this.sourceCell = cell;
           this.sourceCell.click = true;
@@ -442,7 +444,7 @@
       refreshMaps() {
         this.showMaps = [];
         this.showMaps = this.maps;
-        //        this.printMaps();
+        //this.printMaps();
       },
       //打印
       printMaps() {
@@ -488,6 +490,8 @@
     text-align: center;
     border: solid 2px gold;
     user-select: none;
+    position: relative;
+    border-radius: 50%;
   }
 
   .cell_click {
@@ -508,5 +512,57 @@
 
   .cell_y {
     background-image: url("../assets/pic/Y.jpg");
+  }
+
+  .moveDown {
+    animation: moveDown 0.5s;
+  }
+
+  .moveUp {
+    /*animation: moveUp 0.5s;*/
+  }
+
+  .moveLeft {
+    animation: moveLeft 0.5s;
+  }
+
+  .moveRight {
+    animation: moveRight 0.5s;
+  }
+
+  @keyframes moveDown {
+    from {
+      top: 0
+    }
+    to {
+      top: 50px
+    }
+  }
+
+  @keyframes moveUp {
+    from {
+      top: 0
+    }
+    to {
+      top: -50px
+    }
+  }
+
+  @keyframes moveLeft {
+    from {
+      left: 0
+    }
+    to {
+      left: -50px
+    }
+  }
+
+  @keyframes moveRight {
+    from {
+      left: 0
+    }
+    to {
+      left: 50px
+    }
   }
 </style>

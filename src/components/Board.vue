@@ -294,19 +294,6 @@
         return true;
       },
       move(source, target) {
-        if (!this.near(source, target)) {
-          this.sourceCell = target;
-          this.sourceCell.click = true;
-          this.refreshMaps();
-          console.log('not near');
-          return;
-        }
-        if (source.color == target.color) {
-          this.sourceCell = null;
-          this.refreshMaps();
-          console.log('no eliminate cell');
-          return;
-        }
         let sourceColor = this.maps[source.x][source.y].color;
         let targetColor = this.maps[target.x][target.y].color;
         this.maps[target.x][target.y].color = sourceColor;
@@ -315,15 +302,13 @@
           this.maps[source.x][source.y].color = sourceColor;
           this.maps[target.x][target.y].color = targetColor;
           this.sourceCell = null;
+          this.removingFlag = false;
           this.refreshMaps();
           console.log('no eliminate cell');
           return;
         }
         //消除
-        this.removingFlag = true;
-        window.setTimeout(() => {
-          this.fadeCircle();
-        }, 500)
+        this.fadeCircle();
       },
       near(source, target) {
         let nearCell = (source.x == target.x && (source.y == target.y + 1 || source.y == target.y - 1)) ||
@@ -434,7 +419,17 @@
         if (this.removingFlag) return;
         if (this.sourceCell != null) {
           this.maps[this.sourceCell.x][this.sourceCell.y].click = false;
-          this.move(this.sourceCell, cell);
+          if (!this.near(this.sourceCell, cell)) {
+            cell.click = true;
+            this.sourceCell = cell;
+            this.refreshMaps();
+            console.log('not near');
+            return;
+          }
+          this.removingFlag = true;
+          window.setTimeout(() => {
+            this.move(this.sourceCell, cell);
+          }, 500)
         } else {
           this.sourceCell = cell;
           this.sourceCell.click = true;
@@ -519,7 +514,7 @@
   }
 
   .moveUp {
-    /*animation: moveUp 0.5s;*/
+    animation: moveUp 0.5s;
   }
 
   .moveLeft {

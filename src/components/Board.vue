@@ -9,7 +9,10 @@
                              cell_g:cell.color=='G',
                              cell_y:cell.color=='Y',
                              cell_click:cell.click,
-                             moveUp:removingFlag&&cell.x==sourceCell.x&&cell.y-sourceCell.y==1
+                             moveUp:isMoveUp(cell),
+                             moveDown:isMoveDown(cell),
+                             moveLeft:isMoveLeft(cell),
+                             moveRight:isMoveRight(cell)
                            }">
         </div>
       </div>
@@ -28,6 +31,7 @@
         ySize: 8,
         removeList: [],
         sourceCell: null,
+        targetCell: null,
         removingFlag: false
       }
     },
@@ -303,7 +307,6 @@
           this.maps[target.x][target.y].color = targetColor;
           this.sourceCell = null;
           this.removingFlag = false;
-          this.refreshMaps();
           console.log('no eliminate cell');
           return;
         }
@@ -427,6 +430,7 @@
             return;
           }
           this.removingFlag = true;
+          this.targetCell = cell;
           window.setTimeout(() => {
             this.move(this.sourceCell, cell);
           }, 500)
@@ -434,6 +438,46 @@
           this.sourceCell = cell;
           this.sourceCell.click = true;
           this.refreshMaps();
+        }
+      },
+      isMoveUp(cell) {
+        if (!this.removingFlag) return false
+        if (this.sourceCell.x != this.targetCell.x) return false;
+        if (cell.x == this.sourceCell.x && cell.y == this.sourceCell.y) {
+          return cell.y == this.targetCell.y + 1
+        }
+        if (cell.x == this.targetCell.x && cell.y == this.targetCell.y) {
+          return cell.y == this.sourceCell.y + 1
+        }
+      },
+      isMoveDown(cell) {
+        if (!this.removingFlag) return false
+        if (this.sourceCell.x != this.targetCell.x) return false;
+        if (cell.x == this.sourceCell.x && cell.y == this.sourceCell.y) {
+          return cell.y == this.targetCell.y - 1
+        }
+        if (cell.x == this.targetCell.x && cell.y == this.targetCell.y) {
+          return cell.y == this.sourceCell.y - 1
+        }
+      },
+      isMoveLeft(cell) {
+        if (!this.removingFlag) return false
+        if (this.sourceCell.y != this.targetCell.y) return false;
+        if (cell.x == this.sourceCell.x && cell.y == this.sourceCell.y) {
+          return cell.x == this.targetCell.x + 1
+        }
+        if (cell.x == this.targetCell.x && cell.y == this.targetCell.y) {
+          return cell.x == this.sourceCell.x + 1
+        }
+      },
+      isMoveRight(cell) {
+        if (!this.removingFlag) return false
+        if (this.sourceCell.y != this.targetCell.y) return false;
+        if (cell.x == this.sourceCell.x && cell.y == this.sourceCell.y) {
+          return cell.x == this.targetCell.x - 1
+        }
+        if (cell.x == this.targetCell.x && cell.y == this.targetCell.y) {
+          return cell.x == this.sourceCell.x - 1
         }
       },
       refreshMaps() {

@@ -1,8 +1,7 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
   <div>
     <div class="board">
-      <div v-for="(row,index) in showMaps" class="row"
-           v-bind:class="{row_left:index==0,row_right:index==showMaps.length-1}">
+      <div v-for="(row,index) in showMaps" class="row">
         <div v-for="cell in row" class="cell" @click="mouseClick(cell)" v-bind:class="{
                              cell_r:cell.color=='R',
                              cell_b:cell.color=='B',
@@ -508,19 +507,7 @@
 <style scoped>
   .board {
     display: flex;
-  }
-
-  .row {
-    border-top: solid 4px gold;
-    border-bottom: solid 4px gold;
-  }
-
-  .row_left {
-    border-left: solid 4px gold;
-  }
-
-  .row_right {
-    border-right: solid 4px gold;
+    outline: solid 4px gold;
   }
 
   .cell {

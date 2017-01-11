@@ -8,17 +8,20 @@
       </aside>
       <div class="right"></div>
     </div>
-    <footer></footer>
+    <footer>
+      <!--<css-test></css-test>-->
+    </footer>
   </div>
 </template>
 
 <script>
   import Board from './components/Board'
+  import CssTest from './components/CssTest'
 
   export default {
     name: 'app',
     components: {
-      Board
+      Board,CssTest
     }
   }
 </script>

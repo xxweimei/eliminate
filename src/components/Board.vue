@@ -416,7 +416,7 @@
         this.refreshMaps();
         window.setTimeout(() => {
           this.downCell()
-        }, 500);
+        }, 400);
       },
       downCell() {
         this.initColors();
@@ -432,7 +432,7 @@
         this.refreshMaps();
         window.setTimeout(() => {
           this.fadeCircle();
-        }, 500);
+        }, 400);
       },
       sameCellColorLeft(x, y, color, sameList) {
         if (sameList.indexOf(x + '_' + y) == -1) {

@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import App from './App'
+//noinspection ES6UnusedImports
+import Bulma from 'bulma'
 
 /* eslint-disable no-new */
 new Vue({

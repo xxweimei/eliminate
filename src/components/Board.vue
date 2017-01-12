@@ -1,5 +1,18 @@
 <template xmlns:v-bind="http://www.w3.org/1999/xhtml">
   <div>
+    <div class="top">
+      <button @click="startGame">开始游戏</button>
+      <div>
+        <span>combo：</span>
+        <span>{{combo}}</span>
+      </div>
+      <div>
+        <span>当前得分：</span>
+        <span>{{score}}</span>
+      </div>
+      <span>{{time}}</span>
+      <progress class="progress is-primary" v-bind:value="timeProgress" max="100" style="max-width: 400px"></progress>
+    </div>
     <div class="board">
       <div v-for="(row,index) in showMaps" class="row">
         <div v-for="cell in row" class="cell" @click="mouseClick(cell)" v-bind:class="{
@@ -16,11 +29,15 @@
         </div>
       </div>
     </div>
+    <div class="bottom">
+    </div>
   </div>
 </template>
 
 <script>
+
   export default {
+    components: {},
     data() {
       return {
         maps: [],
@@ -31,7 +48,12 @@
         removeList: [],
         sourceCell: null,
         targetCell: null,
-        removingFlag: false
+        removingFlag: false,
+        score: 0,
+        combo: 0,
+        timeProgress: 100,
+        gameTime: 60,
+        startFlag: false
       }
     },
     mounted() {
@@ -41,8 +63,35 @@
       }
       this.refreshMaps();
     },
-    computed: {},
+    computed: {
+      time() {
+        let time = (this.timeProgress / 100 * this.gameTime).toString().split('.')
+        if (time.length == 2) {
+          return time[0] + '.' + time[1].substr(0, 3)
+        } else {
+          return time[0]
+        }
+      }
+    },
     methods: {
+      startGame() {
+        if(this.startFlag) return
+        this.startFlag = true
+        this.timeProgress = 100
+        this.score = 0
+        let endTime = new Date()
+        endTime.setSeconds(endTime.getSeconds() + this.gameTime)
+        let timeIntervalId = setInterval(() => {
+          if (endTime <= new Date()) {
+            clearInterval(timeIntervalId)
+            this.timeProgress = 0
+            this.startFlag = false
+            alert('时间到')
+          } else {
+            this.timeProgress = (endTime - new Date()) / this.gameTime / 10
+          }
+        }, 1)
+      },
       //初始化地图
       initMaps() {
         for (let i = 0; i < this.ySize; i++) {
@@ -338,11 +387,13 @@
               this.sameCellColorUp(i, j, this.maps[i][j].color, colList);
               this.sameCellColorDown(i, j, this.maps[i][j].color, colList);
               if (rowList.length > 2) {
+                this.score += rowList.length * (this.combo + 1)
                 rowList.forEach((cellKey) => {
                   this.removeList.push(cellKey);
                 });
               }
               if (colList.length > 2) {
+                this.score += colList.length * (this.combo + 1)
                 colList.forEach((cellKey) => {
                   this.removeList.push(cellKey);
                 });
@@ -353,10 +404,12 @@
       },
       removeAndDownCell() {
         if (this.removeList.length == 0) {
-          this.removingFlag = false;
-          this.sourceCell = null;
+          this.removingFlag = false
+          this.sourceCell = null
+          this.combo = 0
           return;
         }
+        this.combo++
         this.removeList.forEach((cellKey) => {
           this.maps[cellKey.split('_')[0]][cellKey.split('_')[1]].color = ' ';
         });
@@ -418,6 +471,7 @@
         }
       },
       mouseClick(cell) {
+        if (!this.startFlag || this.timeProgress == 0) return;
         if (this.removingFlag) return;
         if (this.sourceCell != null) {
           this.maps[this.sourceCell.x][this.sourceCell.y].click = false;
@@ -505,9 +559,22 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .top {
+    margin-bottom: 10px;
+    max-width: 400px;
+  }
+
+  .bottom {
+    margin-top: 10px;
+    max-width: 400px;
+  }
+
   .board {
     display: flex;
     outline: solid 4px gold;
+    margin: 4px;
+    max-width: 400px;
   }
 
   .cell {

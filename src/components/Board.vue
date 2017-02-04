@@ -86,7 +86,7 @@
             clearInterval(timeIntervalId)
             this.timeProgress = 0
             this.startFlag = false
-            alert('时间到')
+            console.log('时间到')
           } else {
             this.timeProgress = (endTime - new Date()) / this.gameTime / 10
           }

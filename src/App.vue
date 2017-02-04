@@ -9,14 +9,12 @@
       <div class="right"></div>
     </div>
     <footer>
-      <!--<css-test></css-test>-->
     </footer>
   </div>
 </template>
 
 <script>
   import Board from './components/Board'
-  import CssTest from './components/CssTest'
 
   export default {
     name: 'app',

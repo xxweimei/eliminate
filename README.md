@@ -2,6 +2,8 @@
 
 > 使用vue2做的一个网页版三消小游戏。
 
+> demo: [https://xxweimei.github.io/](https://xxweimei.github.io/)
+
 ## Build Setup
 
 ``` bash

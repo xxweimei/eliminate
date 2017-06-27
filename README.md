@@ -2,7 +2,7 @@
 
 > 使用vue2做的一个网页版三消小游戏。
 
-> demo: [https://xxweimei.github.io/](https://xxweimei.github.io/)
+> demo: [https://xxweimei.github.io/game.html](https://xxweimei.github.io/game.html)
 
 ## Build Setup
 
